@@ -1,0 +1,116 @@
+import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse, AxiosError } from 'axios';
+
+export interface AuthConfig {
+  type: 'bearer' | 'apiKey' | 'basic' | 'none';
+  token?: string;
+  apiKey?: string;
+  username?: string;
+  password?: string;
+  headerName?: string;
+}
+
+export class HttpClient {
+  private client: AxiosInstance;
+  private authConfig: AuthConfig;
+
+  constructor(baseURL: string, authConfig: AuthConfig = { type: 'none' }, config?: AxiosRequestConfig) {
+    this.authConfig = authConfig;
+    
+    this.client = axios.create({
+      baseURL,
+      timeout: 10000,
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      ...config,
+    });
+
+    this.setupInterceptors();
+    this.setupAuth();
+  }
+
+  private setupAuth(): void {
+    switch (this.authConfig.type) {
+      case 'bearer':
+        if (this.authConfig.token) {
+          this.client.defaults.headers.common['Authorization'] = `Bearer ${this.authConfig.token}`;
+        }
+        break;
+      case 'apiKey':
+        if (this.authConfig.apiKey && this.authConfig.headerName) {
+          this.client.defaults.headers.common[this.authConfig.headerName] = this.authConfig.apiKey;
+        }
+        break;
+      case 'basic':
+        if (this.authConfig.username && this.authConfig.password) {
+          const credentials = btoa(`${this.authConfig.username}:${this.authConfig.password}`);
+          this.client.defaults.headers.common['Authorization'] = `Basic ${credentials}`;
+        }
+        break;
+    }
+  }
+
+  private setupInterceptors(): void {
+    this.client.interceptors.request.use(
+      (config) => {
+        console.log(`${config.method?.toUpperCase()} ${config.url}`);
+        return config;
+      },
+      (error) => Promise.reject(error)
+    );
+
+    this.client.interceptors.response.use(
+      (response) => {
+        console.log(`Response: ${response.status}`);
+        console.log(JSON.stringify(response.data, null, 2));
+        return response;
+      },
+      (error: AxiosError) => {
+        console.log(`Error: ${error.response?.status}`);
+        console.log(JSON.stringify(error.response?.data, null, 2));
+        return Promise.reject(error);
+      }
+    );
+  }
+
+  async get<T = any>(url: string, config?: AxiosRequestConfig): Promise<AxiosResponse<T>> {
+    try {
+      return await this.client.get<T>(url, config);
+    } catch (error: any) {
+      return error.response || error;
+    }
+  }
+
+  async post<T = any>(url: string, data?: any, config?: AxiosRequestConfig): Promise<AxiosResponse<T>> {
+    try {
+      return await this.client.post<T>(url, data, config);
+    } catch (error: any) {
+      return error.response || error;
+    }
+  }
+
+  async put<T = any>(url: string, data?: any, config?: AxiosRequestConfig): Promise<AxiosResponse<T>> {
+    return this.client.put<T>(url, data, config);
+  }
+
+  async delete<T = any>(url: string, config?: AxiosRequestConfig): Promise<AxiosResponse<T>> {
+    return this.client.delete<T>(url, config);
+  }
+
+  async patch<T = any>(url: string, data?: any, config?: AxiosRequestConfig): Promise<AxiosResponse<T>> {
+    return this.client.patch<T>(url, data, config);
+  }
+
+  updateAuth(authConfig: AuthConfig): void {
+    this.authConfig = authConfig;
+    this.setupAuth();
+  }
+
+  setDefaultHeader(key: string, value: string): void {
+    this.client.defaults.headers.common[key] = value;
+  }
+
+  removeDefaultHeader(key: string): void {
+    delete this.client.defaults.headers.common[key];
+  }
+}

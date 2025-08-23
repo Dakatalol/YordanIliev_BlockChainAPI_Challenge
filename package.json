@@ -1,0 +1,23 @@
+{
+  "name": "yordaniliev_blockchainapi_challenge",
+  "scripts": {
+    "test": "mocha --require ts-node/register test/**/*.test.ts",
+    "test:quote": "mocha --require ts-node/register test/quote.test.ts",
+    "test:swap": "mocha --require ts-node/register test/swap.test.ts"
+  },
+  "keywords": ["api-testing", "blockchain", "jupiter", "solana", "automation"],
+  "author": "Yordan Iliev",
+  "license": "ISC",
+  "description": "Automation testing project for Jupiter Exchange API",
+  "dependencies": {
+    "axios": "^1.6.0",
+    "dotenv": "^16.3.1",
+    "@types/chai": "^4.3.11",
+    "@types/mocha": "^10.0.6",
+    "@types/node": "^20.10.5",
+    "chai": "^4.3.10",
+    "mocha": "^10.2.0",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.3.3"
+  }
+}

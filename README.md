@@ -44,11 +44,26 @@ Jupiter is a key DEX aggregator on Solana that finds the best routes for token s
 ```bash
 # Install dependencies
 npm install
-
+```
 
 ## Configuration
 
-Create a `.env` file in the root directory containing JUPITER_BASE_URL. Check example.env
+### Environment Setup
+
+The project requires a `.env` file for API configuration. Create it in the project root:
+
+**Step 1:** Copy the example file
+```bash
+cp example.env .env
+```
+
+**Step 2:** Configure the Jupiter API endpoint in your `.env` file:
+```env
+# Jupiter API Configuration
+JUPITER_BASE_URL=https://lite-api.jup.ag/swap/v1
+```
+
+> **Note:** The `.env` file is optional. If not provided, the project will use the default Jupiter API endpoint.
 
 ## Running Tests
 

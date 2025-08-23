@@ -48,9 +48,7 @@ npm install
 
 ## Configuration
 
-Create a `.env` file in the root directory. Check example.env.
-JUPITER_BASE_URL=https://quote-api.jup.ag
-
+Create a `.env` file in the root directory containing JUPITER_BASE_URL. Check example.env
 
 ## Running Tests
 

@@ -23,11 +23,5 @@ jobs:
     - name: Install dependencies
       run: npm ci
       
-    - name: Run Quote API tests
-      run: npm run test:quote
-      
-    - name: Run Swap API tests  
-      run: npm run test:swap
-      
     - name: Run all tests
       run: npm test

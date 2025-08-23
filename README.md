@@ -1,5 +1,7 @@
 # Jupiter Exchange API Testing Suite
 
+![Tests](https://github.com/your-username/YordanIliev_BlockChainAPI_Challenge/workflows/Test%20Suite/badge.svg)
+
 A simple automated testing project for the **Jupiter Exchange API** on Solana blockchain. This project provides extensive API test coverage for quote generation, swap transaction creation, and large amount handling scenarios.
 
 ## Overview
@@ -77,6 +79,15 @@ Tests validate API responses against:
 - Boundary condition handling
 
 Each test case includes detailed assertions and logging for analysis and debugging.
+
+## Continuous Integration
+
+The project includes GitHub Actions workflow that automatically runs tests on:
+- Every push to `main` or `develop` branches
+- Every pull request to `main` or `develop` branches
+- Node.js 20 environment
+
+Check the **Actions** tab in GitHub to see test results and build status.
 
 ## Dependencies
 

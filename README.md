@@ -1,6 +1,6 @@
 # Jupiter Exchange API Testing Suite
 
-![Tests](https://github.com/your-username/YordanIliev_BlockChainAPI_Challenge/workflows/Test%20Suite/badge.svg)
+![Tests](https://github.com/Dakatalol/YordanIliev_BlockChainAPI_Challenge/workflows/Test%20Suite/badge.svg)
 
 A simple automated testing project for the **Jupiter Exchange API** on Solana blockchain. This project provides extensive API test coverage for quote generation, swap transaction creation, and large amount handling scenarios.
 
@@ -48,7 +48,8 @@ npm install
 
 ## Configuration
 
-Create a `.env` file in the root directory (optional):
+Create a `.env` file in the root directory. Check example.env.
+
 ```
 JUPITER_BASE_URL=https://quote-api.jup.ag
 ```

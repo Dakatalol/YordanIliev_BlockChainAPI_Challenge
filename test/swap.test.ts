@@ -4,6 +4,7 @@ import { SwapPage } from '../pages/SwapPage';
 import { QuotePage } from '../pages/QuotePage';
 import { config } from '../config/environment';
 import { PRIORITY_FEES, VALID_USER_PUBLIC_KEY } from '../constants/constants';
+import { Logger } from '../utils/Logger';
 import { 
   SOL_TO_USDC_BASIC, 
   USDC_TO_SOL_REVERSE, 
@@ -88,7 +89,7 @@ describe('Jupiter Swap API Tests', () => {
         expect(actualFee).to.be.within(level.fee - 5, level.fee, 
           `Priority fee should be close to requested ${level.fee}, got ${actualFee}`);
         
-        console.log(`${level.name} priority (${level.fee} lamports) -> response fee: ${actualFee}`);
+        Logger.info(`${level.name} priority (${level.fee} lamports) -> response fee: ${actualFee}`);
       }
     });
 
@@ -121,7 +122,7 @@ describe('Jupiter Swap API Tests', () => {
       expect(response.data.computeUnitLimit).to.be.lessThan(1400000, 
         'Dynamic compute limit should be optimized to less than max 1,400,000');
       
-      console.log(`Dynamic compute limit: ${response.data.computeUnitLimit} (optimized from max 1,400,000)`);
+      Logger.info(`Dynamic compute limit: ${response.data.computeUnitLimit} (optimized from max 1,400,000)`);
     });
 
     it('TC-05: Different Token Pairs - Swap transactions for various token combinations', async () => {
@@ -157,8 +158,6 @@ describe('Jupiter Swap API Tests', () => {
         expect(response.data).to.have.property('lastValidBlockHeight');
         expect(response.data.lastValidBlockHeight).to.be.a('number');
         expect(response.data.lastValidBlockHeight).to.be.greaterThan(0);
-        
-        console.log(`${pair.name}: Transaction generated (${response.data.swapTransaction.length} chars)`);
       }
     });
 

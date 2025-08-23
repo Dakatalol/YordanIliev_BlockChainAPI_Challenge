@@ -1,6 +1,7 @@
 import { expect } from 'chai';
 import { QuoteRequest, QuoteResponse } from '../types/quoteTypes';
 import { EXPECTED_RANGES, HTTP_STATUS } from '../constants/constants';
+import { Logger } from '../utils/Logger';
 
 export class QuoteValidators {
   
@@ -80,8 +81,8 @@ export class QuoteValidators {
     
     // Both should be successful, but routes might differ
     // This is more of a comparison test to ensure the parameter works
-    console.log(`Restricted routes: ${restrictedResponse.data.routePlan.length}`);
-    console.log(`Unrestricted routes: ${unrestrictedResponse.data.routePlan.length}`);
+    Logger.debug(`Restricted routes: ${restrictedResponse.data.routePlan.length}`);
+    Logger.debug(`Unrestricted routes: ${unrestrictedResponse.data.routePlan.length}`);
   }
 
   // Validation for error responses with optional error code validation

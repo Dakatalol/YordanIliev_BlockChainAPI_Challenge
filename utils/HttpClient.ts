@@ -1,4 +1,5 @@
 import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse, AxiosError } from 'axios';
+import { Logger } from './Logger';
 
 export interface AuthConfig {
   type: 'bearer' | 'apiKey' | 'basic' | 'none';
@@ -53,7 +54,7 @@ export class HttpClient {
   private setupInterceptors(): void {
     this.client.interceptors.request.use(
       (config) => {
-        console.log(`${config.method?.toUpperCase()} ${config.url}`);
+        Logger.debug(`${config.method?.toUpperCase()} ${config.url}`);
         return config;
       },
       (error) => Promise.reject(error)
@@ -61,13 +62,13 @@ export class HttpClient {
 
     this.client.interceptors.response.use(
       (response) => {
-        console.log(`Response: ${response.status}`);
-        console.log(JSON.stringify(response.data, null, 2));
+        Logger.debug(`Response: ${response.status}`);
+        Logger.debugObject('Response Data:', response.data);
         return response;
       },
       (error: AxiosError) => {
-        console.log(`Error: ${error.response?.status}`);
-        console.log(JSON.stringify(error.response?.data, null, 2));
+        Logger.debug(`Error: ${error.response?.status}`);
+        Logger.debugObject('Error Data:', error.response?.data);
         return Promise.reject(error);
       }
     );

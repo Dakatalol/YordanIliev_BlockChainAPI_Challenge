@@ -25,3 +25,5 @@ jobs:
       
     - name: Run all tests
       run: npm test
+      env:
+        LOG_LEVEL: INFO

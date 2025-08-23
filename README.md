@@ -57,13 +57,44 @@ The project requires a `.env` file for API configuration. Create it in the proje
 cp example.env .env
 ```
 
-**Step 2:** Configure the Jupiter API endpoint in your `.env` file:
+**Step 2:** Configure the Jupiter API endpoint and logging in your `.env` file:
 ```env
 # Jupiter API Configuration
 JUPITER_BASE_URL=https://lite-api.jup.ag/swap/v1
+
+# Log Level Configuration
+LOG_LEVEL=DEBUG
 ```
 
-> **Note:** The `.env` file is optional. If not provided, the project will use the default Jupiter API endpoint.
+### Configuration Options
+
+| Variable | Description | Default Value | Options |
+|----------|-------------|---------------|---------|
+| `JUPITER_BASE_URL` | Jupiter API base endpoint | `https://lite-api.jup.ag/swap/v1` | Any valid URL |
+| `LOG_LEVEL` | Controls test output verbosity | `DEBUG` | `INFO`, `DEBUG` |
+
+### Log Levels
+
+- **INFO**: Shows only test results (clean output)
+  ```
+  Jupiter Quote API Tests
+    Happy Path Tests
+  ✔ TC-01: Should get valid quote for SOL to USDC swap (336ms)
+  ```
+
+- **DEBUG**: Shows detailed request/response information + test results
+  ```
+  GET /v6/quote?inputMint=So11111111...
+  Response: 200
+  Response Data:
+  {
+    "inputMint": "So11111111...",
+    "outAmount": "18450000"
+  }
+  ✔ TC-01: Should get valid quote for SOL to USDC swap (336ms)
+  ```
+
+> **Note:** The `.env` file is optional. If not provided, the project will use default values.
 
 ## Running Tests
 

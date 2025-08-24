@@ -1,6 +1,7 @@
 import { AxiosResponse } from 'axios';
 import { HttpClient } from '../utils/HttpClient';
 import { SwapInstructionsRequest, SwapInstructionsResponse } from '../types/swapInstructionsTypes';
+import { config } from '../config/environment';
 
 /**
  * Page object for Jupiter's swap-instructions API endpoint
@@ -20,6 +21,6 @@ export class SwapInstructionsPage {
   async postSwapInstructions(
     request: SwapInstructionsRequest
   ): Promise<AxiosResponse<SwapInstructionsResponse>> {
-    return this.httpClient.post<SwapInstructionsResponse>('/swap-instructions', request);
+    return this.httpClient.post<SwapInstructionsResponse>(`/swap/v1/swap-instructions`, request);
   }
 }

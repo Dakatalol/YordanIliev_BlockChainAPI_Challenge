@@ -1,6 +1,7 @@
 import { AxiosResponse } from 'axios';
 import { HttpClient } from '../utils/HttpClient';
 import { QuoteRequest, QuoteResponse } from '../types/quoteTypes';
+import { config } from '../config/environment';
 
 export class QuotePage {
   private httpClient: HttpClient;
@@ -23,6 +24,6 @@ export class QuotePage {
 
   async getQuote(params: QuoteRequest): Promise<AxiosResponse<QuoteResponse>> {
     const queryParams = this.buildQueryParams(params);
-    return this.httpClient.get<QuoteResponse>(`/quote?${queryParams.toString()}`);
+    return this.httpClient.get<QuoteResponse>(`/swap/v1/quote?${queryParams.toString()}`);
   }
 }

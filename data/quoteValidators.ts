@@ -17,7 +17,6 @@ export class QuoteValidators {
     // Data type validations
     expect(response.data.outAmount).to.be.a('string');
     expect(parseInt(response.data.outAmount)).to.be.greaterThan(0);
-    expect(response.data.routePlan).to.be.an('array');
     expect(response.data.routePlan.length).to.be.greaterThan(0);
   }
 

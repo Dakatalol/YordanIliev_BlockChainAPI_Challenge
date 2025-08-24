@@ -5,6 +5,7 @@
     "test:quote": "mocha --require ts-node/register test/quote.test.ts",
     "test:swap": "mocha --require ts-node/register test/swap.test.ts",
     "test:swap-instructions": "mocha --require ts-node/register test/swapInstructions.test.ts",
+    "test:token": "mocha --require ts-node/register test/token.test.ts",
     "format": "prettier --write ."
   },
   "keywords": [

@@ -22,17 +22,8 @@
     "noUncheckedIndexedAccess": true,
     "noImplicitOverride": true
   },
-  "include": [
-    "utils/**/*",
-    "pages/**/*",
-    "types/**/*",
-    "config/**/*",
-    "test/**/*"
-  ],
-  "exclude": [
-    "node_modules",
-    "dist"
-  ],
+  "include": ["utils/**/*", "pages/**/*", "types/**/*", "config/**/*", "test/**/*"],
+  "exclude": ["node_modules", "dist"],
   "ts-node": {
     "esm": false,
     "experimentalSpecifierResolution": "node"

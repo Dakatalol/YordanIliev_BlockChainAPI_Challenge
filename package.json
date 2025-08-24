@@ -4,9 +4,16 @@
     "test": "mocha --require ts-node/register test/**/*.test.ts",
     "test:quote": "mocha --require ts-node/register test/quote.test.ts",
     "test:swap": "mocha --require ts-node/register test/swap.test.ts",
-    "test:swap-instructions": "mocha --require ts-node/register test/swapInstructions.test.ts"
+    "test:swap-instructions": "mocha --require ts-node/register test/swapInstructions.test.ts",
+    "format": "prettier --write ."
   },
-  "keywords": ["api-testing", "blockchain", "jupiter", "solana", "automation"],
+  "keywords": [
+    "api-testing",
+    "blockchain",
+    "jupiter",
+    "solana",
+    "automation"
+  ],
   "author": "Yordan Iliev",
   "license": "ISC",
   "description": "Automation testing project for Jupiter Exchange API",
@@ -18,6 +25,7 @@
     "@types/node": "^20.10.5",
     "chai": "^4.3.10",
     "mocha": "^10.2.0",
+    "prettier": "^3.0.0",
     "ts-node": "^10.9.2",
     "typescript": "^5.3.3"
   }

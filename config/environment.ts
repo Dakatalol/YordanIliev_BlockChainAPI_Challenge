@@ -4,5 +4,5 @@ dotenv.config();
 
 export const config = {
   JUPITER_BASE_URL: process.env.JUPITER_BASE_URL || 'https://lite-api.jup.ag/swap/v1',
-  LOG_LEVEL: process.env.LOG_LEVEL || 'DEBUG'
+  LOG_LEVEL: process.env.LOG_LEVEL || 'DEBUG',
 };

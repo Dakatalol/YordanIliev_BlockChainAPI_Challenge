@@ -6,7 +6,7 @@ export const SOL_TO_USDC_BASIC: QuoteRequest = {
   inputMint: TOKEN_ADDRESSES.SOL,
   outputMint: TOKEN_ADDRESSES.USDC,
   amount: TEST_AMOUNTS.MEDIUM, // 0.1 SOL
-  slippageBps: SLIPPAGE_BPS.LOW
+  slippageBps: SLIPPAGE_BPS.LOW,
 };
 
 // TC-02: Valid Quote for USDC to SOL Swap (Reverse)
@@ -14,7 +14,7 @@ export const USDC_TO_SOL_REVERSE: QuoteRequest = {
   inputMint: TOKEN_ADDRESSES.USDC,
   outputMint: TOKEN_ADDRESSES.SOL,
   amount: TEST_AMOUNTS.USDC_MEDIUM, // ~18.39 USDC
-  slippageBps: SLIPPAGE_BPS.LOW
+  slippageBps: SLIPPAGE_BPS.LOW,
 };
 
 // TC-03: Valid Quote for USDC to USDT (Stable Coins)
@@ -22,7 +22,7 @@ export const USDC_TO_USDT_STABLE: QuoteRequest = {
   inputMint: TOKEN_ADDRESSES.USDC,
   outputMint: TOKEN_ADDRESSES.USDT,
   amount: TEST_AMOUNTS.USDC_LARGE, // 1000 USDC
-  slippageBps: SLIPPAGE_BPS.VERY_LOW
+  slippageBps: SLIPPAGE_BPS.VERY_LOW,
 };
 
 // TC-08: Slippage Calculation Verification
@@ -30,7 +30,7 @@ export const SLIPPAGE_CALCULATION_TEST: QuoteRequest = {
   inputMint: TOKEN_ADDRESSES.SOL,
   outputMint: TOKEN_ADDRESSES.USDC,
   amount: TEST_AMOUNTS.MEDIUM,
-  slippageBps: SLIPPAGE_BPS.MEDIUM // 100 bps for easy calculation
+  slippageBps: SLIPPAGE_BPS.MEDIUM, // 100 bps for easy calculation
 };
 
 // TC-09: Direct Routes Only
@@ -39,7 +39,7 @@ export const DIRECT_ROUTES_ONLY: QuoteRequest = {
   outputMint: TOKEN_ADDRESSES.USDC,
   amount: TEST_AMOUNTS.MEDIUM,
   slippageBps: SLIPPAGE_BPS.LOW,
-  onlyDirectRoutes: true
+  onlyDirectRoutes: true,
 };
 
 // TC-11: Restrict Intermediate Tokens - Restricted
@@ -48,7 +48,7 @@ export const RESTRICTED_INTERMEDIATE_TOKENS: QuoteRequest = {
   outputMint: TOKEN_ADDRESSES.USDC,
   amount: TEST_AMOUNTS.MEDIUM,
   slippageBps: SLIPPAGE_BPS.LOW,
-  restrictIntermediateTokens: true
+  restrictIntermediateTokens: true,
 };
 
 // TC-11: Restrict Intermediate Tokens - Unrestricted
@@ -57,7 +57,7 @@ export const UNRESTRICTED_INTERMEDIATE_TOKENS: QuoteRequest = {
   outputMint: TOKEN_ADDRESSES.USDC,
   amount: TEST_AMOUNTS.MEDIUM,
   slippageBps: SLIPPAGE_BPS.LOW,
-  restrictIntermediateTokens: false
+  restrictIntermediateTokens: false,
 };
 
 // LARGE AMOUNT HANDLING TEST CASE
@@ -67,7 +67,7 @@ export const MILLION_SOL_TO_USDC: QuoteRequest = {
   inputMint: TOKEN_ADDRESSES.SOL,
   outputMint: TOKEN_ADDRESSES.USDC,
   amount: TEST_AMOUNTS.MILLION_SOL, // 1,000,000 SOL
-  slippageBps: SLIPPAGE_BPS.VERY_HIGH // Very high slippage for extreme amounts
+  slippageBps: SLIPPAGE_BPS.VERY_HIGH, // Very high slippage for extreme amounts
 };
 
 // NEGATIVE TEST CASES
@@ -77,7 +77,7 @@ export const MISSING_INPUT_MINT = {
   // inputMint: undefined, // Will be omitted in test
   outputMint: TOKEN_ADDRESSES.USDC,
   amount: TEST_AMOUNTS.MEDIUM,
-  slippageBps: SLIPPAGE_BPS.LOW
+  slippageBps: SLIPPAGE_BPS.LOW,
 };
 
 // TC-05: Invalid Token Mint Address Format
@@ -85,7 +85,7 @@ export const INVALID_TOKEN_FORMAT: QuoteRequest = {
   inputMint: INVALID_DATA.TOKEN_ADDRESSES.INVALID_FORMAT,
   outputMint: TOKEN_ADDRESSES.USDC,
   amount: TEST_AMOUNTS.MEDIUM,
-  slippageBps: SLIPPAGE_BPS.LOW
+  slippageBps: SLIPPAGE_BPS.LOW,
 };
 
 // TC-06: Zero Amount Validation
@@ -93,7 +93,7 @@ export const ZERO_AMOUNT: QuoteRequest = {
   inputMint: TOKEN_ADDRESSES.SOL,
   outputMint: TOKEN_ADDRESSES.USDC,
   amount: TEST_AMOUNTS.ZERO,
-  slippageBps: SLIPPAGE_BPS.LOW
+  slippageBps: SLIPPAGE_BPS.LOW,
 };
 
 // TC-07: Same Input and Output Mint
@@ -101,7 +101,7 @@ export const SAME_INPUT_OUTPUT: QuoteRequest = {
   inputMint: TOKEN_ADDRESSES.SOL,
   outputMint: TOKEN_ADDRESSES.SOL, // Same as input
   amount: TEST_AMOUNTS.MEDIUM,
-  slippageBps: SLIPPAGE_BPS.LOW
+  slippageBps: SLIPPAGE_BPS.LOW,
 };
 
 // TC-10: Non-Existent Token Mint
@@ -109,7 +109,7 @@ export const NON_EXISTENT_TOKEN: QuoteRequest = {
   inputMint: INVALID_DATA.TOKEN_ADDRESSES.NON_EXISTENT,
   outputMint: TOKEN_ADDRESSES.USDC,
   amount: TEST_AMOUNTS.MEDIUM,
-  slippageBps: SLIPPAGE_BPS.LOW
+  slippageBps: SLIPPAGE_BPS.LOW,
 };
 
 // Collection of all valid test scenarios
@@ -122,14 +122,14 @@ export const VALID_SCENARIOS = {
   RESTRICTED_INTERMEDIATE_TOKENS,
   UNRESTRICTED_INTERMEDIATE_TOKENS,
   // Large amount test scenario
-  MILLION_SOL_TO_USDC
+  MILLION_SOL_TO_USDC,
 } as const;
 
-// Collection of all invalid test scenarios  
+// Collection of all invalid test scenarios
 export const INVALID_SCENARIOS = {
   MISSING_INPUT_MINT,
   INVALID_TOKEN_FORMAT,
   ZERO_AMOUNT,
   SAME_INPUT_OUTPUT,
-  NON_EXISTENT_TOKEN
+  NON_EXISTENT_TOKEN,
 } as const;

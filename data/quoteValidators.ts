@@ -4,7 +4,6 @@ import { EXPECTED_RANGES, HTTP_STATUS } from '../constants/constants';
 import { Logger } from '../utils/Logger';
 
 export class QuoteValidators {
-  
   // Basic successful response validation
   static validateSuccessfulQuote(response: any, request: QuoteRequest): void {
     expect(response.status).to.equal(HTTP_STATUS.OK);
@@ -14,7 +13,7 @@ export class QuoteValidators {
     expect(response.data).to.have.property('outAmount');
     expect(response.data).to.have.property('routePlan');
     expect(response.data).to.have.property('slippageBps', request.slippageBps);
-    
+
     // Data type validations
     expect(response.data.outAmount).to.be.a('string');
     expect(parseInt(response.data.outAmount)).to.be.greaterThan(0);
@@ -25,17 +24,17 @@ export class QuoteValidators {
   // Validation for stablecoin swaps (should have minimal price impact)
   static validateStablecoinSwap(response: any, request: QuoteRequest): void {
     this.validateSuccessfulQuote(response, request);
-    
+
     const inputAmount = parseInt(request.amount);
     const outputAmount = parseInt(response.data.outAmount);
     const ratio = outputAmount / inputAmount;
-    
+
     expect(ratio).to.be.within(
-      EXPECTED_RANGES.STABLECOIN_RATIO.MIN, 
+      EXPECTED_RANGES.STABLECOIN_RATIO.MIN,
       EXPECTED_RANGES.STABLECOIN_RATIO.MAX,
       `Stablecoin ratio ${ratio} outside expected range`
     );
-    
+
     // Price impact should be minimal for stablecoins
     const priceImpact = parseFloat(response.data.priceImpactPct);
     expect(priceImpact).to.be.lessThan(0.5, 'Price impact too high for stablecoin swap');
@@ -44,17 +43,18 @@ export class QuoteValidators {
   // Validation for slippage calculation
   static validateSlippageCalculation(response: any, request: QuoteRequest): void {
     this.validateSuccessfulQuote(response, request);
-    
+
     const outAmount = parseInt(response.data.outAmount);
     const otherAmountThreshold = parseInt(response.data.otherAmountThreshold);
     const slippageBps = request.slippageBps;
-    
+
     // Calculate expected threshold: outAmount - (outAmount * slippageBps / 10000)
-    const expectedThreshold = Math.floor(outAmount - (outAmount * slippageBps / 10000));
-    
+    const expectedThreshold = Math.floor(outAmount - (outAmount * slippageBps) / 10000);
+
     // Allow for 1 unit difference due to rounding
     const difference = Math.abs(otherAmountThreshold - expectedThreshold);
-    expect(difference).to.be.lessThanOrEqual(1, 
+    expect(difference).to.be.lessThanOrEqual(
+      1,
       `Slippage calculation too far off. Expected: ${expectedThreshold}, Got: ${otherAmountThreshold}, Difference: ${difference}`
     );
   }
@@ -62,9 +62,12 @@ export class QuoteValidators {
   // Validation for direct routes only
   static validateDirectRoutesOnly(response: any, request: QuoteRequest): void {
     this.validateSuccessfulQuote(response, request);
-    
-    expect(response.data.routePlan).to.have.length(1, 'Should have exactly 1 route for direct swap');
-    
+
+    expect(response.data.routePlan).to.have.length(
+      1,
+      'Should have exactly 1 route for direct swap'
+    );
+
     const route = response.data.routePlan[0];
     expect(route.swapInfo.inputMint).to.equal(request.inputMint);
     expect(route.swapInfo.outputMint).to.equal(request.outputMint);
@@ -72,13 +75,13 @@ export class QuoteValidators {
 
   // Validation for restricted vs unrestricted intermediate tokens
   static validateIntermediateTokenRestriction(
-    restrictedResponse: any, 
-    unrestrictedResponse: any, 
+    restrictedResponse: any,
+    unrestrictedResponse: any,
     request: QuoteRequest
   ): void {
     this.validateSuccessfulQuote(restrictedResponse, request);
     this.validateSuccessfulQuote(unrestrictedResponse, request);
-    
+
     // Both should be successful, but routes might differ
     // This is more of a comparison test to ensure the parameter works
     Logger.debug(`Restricted routes: ${restrictedResponse.data.routePlan.length}`);
@@ -87,20 +90,21 @@ export class QuoteValidators {
 
   // Validation for error responses with optional error code validation
   static validateErrorResponse(
-    errorOrResponse: any, 
-    expectedStatus: number, 
-    expectedErrorKeywords: string[] = [], 
+    errorOrResponse: any,
+    expectedStatus: number,
+    expectedErrorKeywords: string[] = [],
     expectedErrorCode?: string
   ): void {
     // Handle axios error or direct response
     const response = errorOrResponse.response || errorOrResponse;
-    
+
     expect(response.status).to.equal(expectedStatus);
-    
+
     if (expectedErrorKeywords.length > 0) {
       const errorMessage = JSON.stringify(response.data).toLowerCase();
       expectedErrorKeywords.forEach(keyword => {
-        expect(errorMessage).to.include(keyword.toLowerCase(), 
+        expect(errorMessage).to.include(
+          keyword.toLowerCase(),
           `Error message should contain "${keyword}"`
         );
       });
@@ -114,11 +118,15 @@ export class QuoteValidators {
 
   // Validation for 400 Bad Request responses with error code support
   static validateBadRequest(
-    errorOrResponse: any, 
-    expectedErrorKeywords: string[] = [], 
+    errorOrResponse: any,
+    expectedErrorKeywords: string[] = [],
     expectedErrorCode?: string
   ): void {
-    this.validateErrorResponse(errorOrResponse, HTTP_STATUS.BAD_REQUEST, expectedErrorKeywords, expectedErrorCode);
+    this.validateErrorResponse(
+      errorOrResponse,
+      HTTP_STATUS.BAD_REQUEST,
+      expectedErrorKeywords,
+      expectedErrorCode
+    );
   }
-
 }

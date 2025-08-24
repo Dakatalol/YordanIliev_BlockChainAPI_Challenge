@@ -17,7 +17,9 @@ export class SwapInstructionsPage {
    * @param request - Swap instructions request parameters
    * @returns Promise resolving to the swap instructions response
    */
-  async postSwapInstructions(request: SwapInstructionsRequest): Promise<AxiosResponse<SwapInstructionsResponse>> {
+  async postSwapInstructions(
+    request: SwapInstructionsRequest
+  ): Promise<AxiosResponse<SwapInstructionsResponse>> {
     return this.httpClient.post<SwapInstructionsResponse>('/swap-instructions', request);
   }
 }

@@ -23,9 +23,13 @@ export class HttpClient {
    * @param authConfig - Authentication configuration
    * @param config - Additional axios configuration options
    */
-  constructor(baseURL: string, authConfig: AuthConfig = { type: 'none' }, config?: AxiosRequestConfig) {
+  constructor(
+    baseURL: string,
+    authConfig: AuthConfig = { type: 'none' },
+    config?: AxiosRequestConfig
+  ) {
     this.authConfig = authConfig;
-    
+
     this.client = axios.create({
       baseURL,
       timeout: 10000,
@@ -62,15 +66,15 @@ export class HttpClient {
 
   private setupInterceptors(): void {
     this.client.interceptors.request.use(
-      (config) => {
+      config => {
         Logger.debug(`${config.method?.toUpperCase()} ${config.url}`);
         return config;
       },
-      (error) => Promise.reject(error)
+      error => Promise.reject(error)
     );
 
     this.client.interceptors.response.use(
-      (response) => {
+      response => {
         Logger.debug(`Response: ${response.status}`);
         Logger.debugObject('Response Data:', response.data);
         return response;
@@ -104,7 +108,11 @@ export class HttpClient {
    * @param config - Request configuration options
    * @returns Promise resolving to the response
    */
-  async post<T = any>(url: string, data?: any, config?: AxiosRequestConfig): Promise<AxiosResponse<T>> {
+  async post<T = any>(
+    url: string,
+    data?: any,
+    config?: AxiosRequestConfig
+  ): Promise<AxiosResponse<T>> {
     try {
       return await this.client.post<T>(url, data, config);
     } catch (error: any) {
@@ -112,7 +120,11 @@ export class HttpClient {
     }
   }
 
-  async put<T = any>(url: string, data?: any, config?: AxiosRequestConfig): Promise<AxiosResponse<T>> {
+  async put<T = any>(
+    url: string,
+    data?: any,
+    config?: AxiosRequestConfig
+  ): Promise<AxiosResponse<T>> {
     return this.client.put<T>(url, data, config);
   }
 
@@ -120,7 +132,11 @@ export class HttpClient {
     return this.client.delete<T>(url, config);
   }
 
-  async patch<T = any>(url: string, data?: any, config?: AxiosRequestConfig): Promise<AxiosResponse<T>> {
+  async patch<T = any>(
+    url: string,
+    data?: any,
+    config?: AxiosRequestConfig
+  ): Promise<AxiosResponse<T>> {
     return this.client.patch<T>(url, data, config);
   }
 

@@ -6,15 +6,12 @@ export class SwapValidators {
   // Basic successful swap response validation
   static validateSuccessfulSwap(response: any, request: SwapRequest): void {
     expect(response.status).to.equal(HTTP_STATUS.OK);
-    
+
     // Validate core swap transaction fields
     expect(response.data).to.have.property('swapTransaction');
     expect(response.data.swapTransaction).to.be.a('string');
     expect(response.data.swapTransaction).to.not.be.empty;
-    expect(response.data.swapTransaction).to.match(
-      /^[A-Za-z0-9+/]+=*$/,
-      'Should be valid base64'
-    );
+    expect(response.data.swapTransaction).to.match(/^[A-Za-z0-9+/]+=*$/, 'Should be valid base64');
 
     // Validate block height
     expect(response.data).to.have.property('lastValidBlockHeight');
@@ -25,7 +22,7 @@ export class SwapValidators {
   // Priority fee validation with range checking
   static validatePriorityFee(response: any, expectedFee: number): void {
     this.validateSuccessfulSwap(response, {} as SwapRequest);
-    
+
     expect(response.data).to.have.property('prioritizationFeeLamports');
     expect(response.data.prioritizationFeeLamports).to.be.a('number');
 
@@ -42,7 +39,7 @@ export class SwapValidators {
   // Dynamic compute limit validation
   static validateDynamicComputeLimit(response: any): void {
     this.validateSuccessfulSwap(response, {} as SwapRequest);
-    
+
     expect(response.data).to.have.property('computeUnitLimit');
     expect(response.data.computeUnitLimit).to.be.a('number');
     expect(response.data.computeUnitLimit).to.be.greaterThan(0);
@@ -57,7 +54,7 @@ export class SwapValidators {
   // Dynamic slippage validation for large amounts
   static validateDynamicSlippage(response: any): void {
     this.validateSuccessfulSwap(response, {} as SwapRequest);
-    
+
     expect(response.data.dynamicSlippageReport).to.exist;
     expect(response.data.dynamicSlippageReport.slippageBps).to.be.a('number');
   }
@@ -95,11 +92,7 @@ export class SwapValidators {
     errorOrResponse: any,
     expectedErrorKeywords: string[] = []
   ): void {
-    this.validateErrorResponse(
-      errorOrResponse,
-      422,
-      expectedErrorKeywords
-    );
+    this.validateErrorResponse(errorOrResponse, 422, expectedErrorKeywords);
   }
 
   // 400 Bad Request validation

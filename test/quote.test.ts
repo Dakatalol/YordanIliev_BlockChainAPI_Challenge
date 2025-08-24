@@ -122,7 +122,7 @@ describe('Jupiter Quote API Tests', () => {
   describe('Response Schema Validation', () => {
     it('TC-13: Should validate complete quote response schema structure', async () => {
       const response = await quotePage.getQuote(VALID_SCENARIOS.SOL_TO_USDC_BASIC);
-      
+
       QuoteValidators.validateResponseSchema(response);
     });
   });

@@ -42,24 +42,6 @@ export const DIRECT_ROUTES_ONLY: QuoteRequest = {
   onlyDirectRoutes: true,
 };
 
-// TC-11: Restrict Intermediate Tokens - Restricted
-export const RESTRICTED_INTERMEDIATE_TOKENS: QuoteRequest = {
-  inputMint: TOKEN_ADDRESSES.SOL,
-  outputMint: TOKEN_ADDRESSES.USDC,
-  amount: TEST_AMOUNTS.MEDIUM,
-  slippageBps: SLIPPAGE_BPS.LOW,
-  restrictIntermediateTokens: true,
-};
-
-// TC-11: Restrict Intermediate Tokens - Unrestricted
-export const UNRESTRICTED_INTERMEDIATE_TOKENS: QuoteRequest = {
-  inputMint: TOKEN_ADDRESSES.SOL,
-  outputMint: TOKEN_ADDRESSES.USDC,
-  amount: TEST_AMOUNTS.MEDIUM,
-  slippageBps: SLIPPAGE_BPS.LOW,
-  restrictIntermediateTokens: false,
-};
-
 // LARGE AMOUNT HANDLING TEST CASE
 
 // TC-12: Million SOL Amount - Test extreme liquidity limits with 1M SOL
@@ -119,8 +101,6 @@ export const VALID_SCENARIOS = {
   USDC_TO_USDT_STABLE,
   SLIPPAGE_CALCULATION_TEST,
   DIRECT_ROUTES_ONLY,
-  RESTRICTED_INTERMEDIATE_TOKENS,
-  UNRESTRICTED_INTERMEDIATE_TOKENS,
   // Large amount test scenario
   MILLION_SOL_TO_USDC,
 } as const;

@@ -41,17 +41,14 @@ export class SwapInstructionsValidators {
   static validateComputeBudgetInstructions(response: any): void {
     const computeBudgetInstruction = response.data.computeBudgetInstructions[0];
     expect(computeBudgetInstruction.programId).to.equal(this.PROGRAM_IDS.COMPUTE_BUDGET);
-    expect(computeBudgetInstruction.data).to.match(
-      /^[A-Za-z0-9+/]+=*$/,
-      'Should be valid base64'
-    );
+    expect(computeBudgetInstruction.data).to.match(/^[A-Za-z0-9+/]+=*$/, 'Should be valid base64');
   }
 
   // Validate main swap instruction
   static validateSwapInstruction(response: any, userPublicKey: string): void {
     // Validate Jupiter program ID
     expect(response.data.swapInstruction.programId).to.equal(this.PROGRAM_IDS.JUPITER);
-    
+
     // Validate base64 instruction data
     expect(response.data.swapInstruction.data).to.match(
       /^[A-Za-z0-9+/]+=*$/,
@@ -77,11 +74,13 @@ export class SwapInstructionsValidators {
 
   // Validate setup instructions contain required programs
   static validateSetupInstructions(response: any): void {
-    const programIds = response.data.setupInstructions.map((instruction: any) => instruction.programId);
-    
+    const programIds = response.data.setupInstructions.map(
+      (instruction: any) => instruction.programId
+    );
+
     // Should include System Program (for account creation)
     expect(programIds).to.include(this.PROGRAM_IDS.SYSTEM);
-    
+
     // Should include Token Program (for token operations)
     expect(programIds).to.include(this.PROGRAM_IDS.TOKEN);
   }
@@ -89,7 +88,7 @@ export class SwapInstructionsValidators {
   // Validate wSOL cleanup with user as signer
   static validateWsolCleanup(response: any, userPublicKey: string): void {
     expect(response.data.cleanupInstruction).to.exist;
-    
+
     // Cleanup instruction should be Token Program
     expect(response.data.cleanupInstruction.programId).to.equal(this.PROGRAM_IDS.TOKEN);
 

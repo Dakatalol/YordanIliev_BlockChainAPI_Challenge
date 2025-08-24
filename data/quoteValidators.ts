@@ -151,7 +151,7 @@ export class QuoteValidators {
     // RoutePlan array structure validation
     expect(data.routePlan.length).to.be.greaterThan(0);
     const firstRoute = data.routePlan[0];
-    
+
     expect(firstRoute.swapInfo).to.be.an('object');
     expect(firstRoute.percent).to.be.a('number');
 

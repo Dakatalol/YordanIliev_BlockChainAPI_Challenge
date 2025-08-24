@@ -3,7 +3,7 @@ import { HttpClient } from '../utils/HttpClient';
 import { SwapPage } from '../pages/SwapPage';
 import { QuotePage } from '../pages/QuotePage';
 import { config } from '../config/environment';
-import { PRIORITY_FEES, VALID_USER_PUBLIC_KEY } from '../constants/constants';
+import { PRIORITY_FEES, VALID_USER_PUBLIC_KEY, TEST_AMOUNTS } from '../constants/constants';
 import { Logger } from '../utils/Logger';
 import { SwapValidators } from '../data/swapValidators';
 import {
@@ -66,7 +66,9 @@ describe('Jupiter Swap API Tests', () => {
 
         SwapValidators.validatePriorityFee(response, level.fee);
 
-        Logger.info(`${level.name} priority (${level.fee} lamports) -> response fee: ${response.data.prioritizationFeeLamports}`);
+        Logger.info(
+          `${level.name} priority (${level.fee} lamports) -> response fee: ${response.data.prioritizationFeeLamports}`
+        );
       }
     });
 
@@ -127,10 +129,9 @@ describe('Jupiter Swap API Tests', () => {
 
       const response = await swapPage.postSwap(invalidSwapRequest as any);
 
-      SwapValidators.validateUnprocessableEntity(
-        response,
-        ['Failed to deserialize the JSON body into the target type: missing field `quoteResponse`']
-      );
+      SwapValidators.validateUnprocessableEntity(response, [
+        'Failed to deserialize the JSON body into the target type: missing field `quoteResponse`',
+      ]);
     });
 
     it('TC-06: Invalid User Public Key - Empty userPublicKey', async () => {
@@ -147,10 +148,9 @@ describe('Jupiter Swap API Tests', () => {
 
       const response = await swapPage.postSwap(invalidSwapRequest);
 
-      SwapValidators.validateUnprocessableEntity(
-        response,
-        ['userPublicKey: Parse error: WrongSize']
-      );
+      SwapValidators.validateUnprocessableEntity(response, [
+        'userPublicKey: Parse error: WrongSize',
+      ]);
     });
 
     it('TC-07: Invalid User Public Key - Malformed Solana address', async () => {
@@ -167,10 +167,9 @@ describe('Jupiter Swap API Tests', () => {
 
       const response = await swapPage.postSwap(invalidSwapRequest);
 
-      SwapValidators.validateUnprocessableEntity(
-        response,
-        ['userPublicKey: Parse error: WrongSize']
-      );
+      SwapValidators.validateUnprocessableEntity(response, [
+        'userPublicKey: Parse error: WrongSize',
+      ]);
     });
 
     it('TC-08: Invalid User Public Key - Invalid base58 encoding', async () => {
@@ -187,10 +186,7 @@ describe('Jupiter Swap API Tests', () => {
 
       const response = await swapPage.postSwap(invalidSwapRequest);
 
-      SwapValidators.validateUnprocessableEntity(
-        response,
-        ['userPublicKey: Parse error: Invalid']
-      );
+      SwapValidators.validateUnprocessableEntity(response, ['userPublicKey: Parse error: Invalid']);
     });
 
     it('TC-09: Invalid Quote - Negative amount in quote', async () => {
@@ -201,8 +197,8 @@ describe('Jupiter Swap API Tests', () => {
       // Modify the quote to have negative amount
       const modifiedQuote = {
         ...quoteResponse.data,
-        inAmount: '-5', // negative amount
-        outAmount: '-5',
+        inAmount: TEST_AMOUNTS.NEGATIVE, // negative amount
+        outAmount: TEST_AMOUNTS.NEGATIVE,
       };
 
       // Input: Request with zero amount quote + dynamic compute limit to trigger simulation
@@ -215,10 +211,9 @@ describe('Jupiter Swap API Tests', () => {
 
       const response = await swapPage.postSwap(swapRequest);
 
-      SwapValidators.validateUnprocessableEntity(
-        response,
-        ['Failed to deserialize the JSON body into the target type: quoteResponse.inAmount']
-      );
+      SwapValidators.validateUnprocessableEntity(response, [
+        'Failed to deserialize the JSON body into the target type: quoteResponse.inAmount',
+      ]);
     });
 
     it('TC-10: Invalid Quote - Same input and output mint', async () => {
@@ -276,7 +271,7 @@ describe('Jupiter Swap API Tests', () => {
       };
 
       const swapResponse = await swapPage.postSwap(swapRequest);
-      
+
       SwapValidators.validateDynamicSlippage(swapResponse);
     });
   });

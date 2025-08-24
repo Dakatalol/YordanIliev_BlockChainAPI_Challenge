@@ -35,7 +35,7 @@ describe('Jupiter Swap Instructions API Tests', () => {
       };
 
       const response = await swapInstructionsPage.postSwapInstructions(swapInstructionsRequest);
-      
+
       SwapInstructionsValidators.validateCompleteInstructions(response, swapInstructionsRequest);
     });
 
@@ -66,7 +66,7 @@ describe('Jupiter Swap Instructions API Tests', () => {
         userPublicKey: VALID_USER_PUBLIC_KEY,
         wrapAndUnwrapSol: true,
       };
-      
+
       const response = await swapInstructionsPage.postSwapInstructions(swapRequest);
 
       SwapInstructionsValidators.validateSuccessfulInstructions(response, swapRequest);
@@ -81,10 +81,9 @@ describe('Jupiter Swap Instructions API Tests', () => {
         userPublicKey: VALID_USER_PUBLIC_KEY,
       });
 
-      SwapInstructionsValidators.validateUnprocessableEntity(
-        response,
-        ['Failed to deserialize the JSON body into the target type: quoteResponse: missing field `inputMint`']
-      );
+      SwapInstructionsValidators.validateUnprocessableEntity(response, [
+        'Failed to deserialize the JSON body into the target type: quoteResponse: missing field `inputMint`',
+      ]);
     });
 
     it('TC-05: Missing User Public Key - Send request without userPublicKey', async () => {
@@ -97,10 +96,9 @@ describe('Jupiter Swap Instructions API Tests', () => {
         // Missing userPublicKey
       } as any);
 
-      SwapInstructionsValidators.validateUnprocessableEntity(
-        response,
-        ['Failed to deserialize the JSON body into the target type: missing field `userPublicKey`']
-      );
+      SwapInstructionsValidators.validateUnprocessableEntity(response, [
+        'Failed to deserialize the JSON body into the target type: missing field `userPublicKey`',
+      ]);
     });
   });
 

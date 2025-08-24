@@ -10,10 +10,19 @@ export interface AuthConfig {
   headerName?: string;
 }
 
+/**
+ * HTTP client wrapper around axios with built-in authentication and logging
+ */
 export class HttpClient {
   private client: AxiosInstance;
   private authConfig: AuthConfig;
 
+  /**
+   * Create a new HttpClient instance
+   * @param baseURL - Base URL for all requests
+   * @param authConfig - Authentication configuration
+   * @param config - Additional axios configuration options
+   */
   constructor(baseURL: string, authConfig: AuthConfig = { type: 'none' }, config?: AxiosRequestConfig) {
     this.authConfig = authConfig;
     
@@ -74,6 +83,12 @@ export class HttpClient {
     );
   }
 
+  /**
+   * Perform a GET request
+   * @param url - Request URL
+   * @param config - Request configuration options
+   * @returns Promise resolving to the response
+   */
   async get<T = any>(url: string, config?: AxiosRequestConfig): Promise<AxiosResponse<T>> {
     try {
       return await this.client.get<T>(url, config);
@@ -82,6 +97,13 @@ export class HttpClient {
     }
   }
 
+  /**
+   * Perform a POST request
+   * @param url - Request URL
+   * @param data - Request body data
+   * @param config - Request configuration options
+   * @returns Promise resolving to the response
+   */
   async post<T = any>(url: string, data?: any, config?: AxiosRequestConfig): Promise<AxiosResponse<T>> {
     try {
       return await this.client.post<T>(url, data, config);
@@ -102,11 +124,20 @@ export class HttpClient {
     return this.client.patch<T>(url, data, config);
   }
 
+  /**
+   * Update the authentication configuration
+   * @param authConfig - New authentication configuration
+   */
   updateAuth(authConfig: AuthConfig): void {
     this.authConfig = authConfig;
     this.setupAuth();
   }
 
+  /**
+   * Set a default header for all requests
+   * @param key - Header name
+   * @param value - Header value
+   */
   setDefaultHeader(key: string, value: string): void {
     this.client.defaults.headers.common[key] = value;
   }

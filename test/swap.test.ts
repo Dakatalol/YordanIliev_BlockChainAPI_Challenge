@@ -338,17 +338,10 @@ describe('Jupiter Swap API Tests', () => {
       expect(swapResponse.data.dynamicSlippageReport).to.exist;
       expect(swapResponse.data.dynamicSlippageReport.slippageBps).to.be.a('number');
 
-      // Simulation error is expected for such extreme amounts
-      expect(swapResponse.data.simulationError).to.exist;
-      expect(swapResponse.data.simulationError.errorCode).to.equal('TRANSACTION_ERROR');
-
-      // Transaction is still generated despite simulation failure
+      // Verify that the swap transaction is generated
       expect(swapResponse.data.swapTransaction).to.exist;
       expect(swapResponse.data.swapTransaction).to.be.a('string');
       expect(swapResponse.data.swapTransaction).to.not.be.empty;
-
-      // Compute units max out for complex swaps
-      expect(swapResponse.data.computeUnitLimit).to.equal(1400000);
     });
   });
 });

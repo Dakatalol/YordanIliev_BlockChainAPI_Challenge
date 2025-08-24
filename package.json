@@ -7,17 +7,10 @@
     "test:swap-instructions": "mocha --require ts-node/register test/swapInstructions.test.ts",
     "test:token": "mocha --require ts-node/register test/token.test.ts",
     "test:price": "mocha --require ts-node/register test/price.test.ts",
+    "perf:quote": "k6 run k6/quote-performance.js",
     "format": "prettier --write ."
   },
-  "keywords": [
-    "api-testing",
-    "blockchain",
-    "jupiter",
-    "solana",
-    "automation"
-  ],
   "author": "Yordan Iliev",
-  "license": "ISC",
   "description": "Automation testing project for Jupiter Exchange API",
   "dependencies": {
     "axios": "^1.6.0",

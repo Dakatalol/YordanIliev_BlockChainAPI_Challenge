@@ -6,6 +6,7 @@
     "test:swap": "mocha --require ts-node/register test/swap.test.ts",
     "test:swap-instructions": "mocha --require ts-node/register test/swapInstructions.test.ts",
     "test:token": "mocha --require ts-node/register test/token.test.ts",
+    "test:price": "mocha --require ts-node/register test/price.test.ts",
     "format": "prettier --write ."
   },
   "keywords": [

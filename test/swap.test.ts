@@ -5,6 +5,7 @@ import { QuotePage } from '../pages/QuotePage';
 import { config } from '../config/environment';
 import { PRIORITY_FEES, VALID_USER_PUBLIC_KEY } from '../constants/constants';
 import { Logger } from '../utils/Logger';
+import { SwapValidators } from '../data/swapValidators';
 import {
   SOL_TO_USDC_BASIC,
   USDC_TO_SOL_REVERSE,
@@ -37,20 +38,7 @@ describe('Jupiter Swap API Tests', () => {
 
       const response = await swapPage.postSwap(swapRequest);
 
-      // Expected: 200 OK, returns base64-encoded swapTransaction
-      expect(response.status).to.equal(200);
-      expect(response.data).to.have.property('swapTransaction');
-      expect(response.data.swapTransaction).to.be.a('string');
-      expect(response.data.swapTransaction).to.not.be.empty;
-      expect(response.data.swapTransaction).to.match(
-        /^[A-Za-z0-9+/]+=*$/,
-        'Should be valid base64'
-      );
-
-      // Validate required response fields
-      expect(response.data).to.have.property('lastValidBlockHeight');
-      expect(response.data.lastValidBlockHeight).to.be.a('number');
-      expect(response.data.lastValidBlockHeight).to.be.greaterThan(0);
+      SwapValidators.validateSuccessfulSwap(response, swapRequest);
     });
 
     it('TC-02: Swap with Priority Fees - Create swap with custom priority fee settings', async () => {
@@ -76,25 +64,9 @@ describe('Jupiter Swap API Tests', () => {
 
         const response = await swapPage.postSwap(swapRequest);
 
-        // Expected: Transaction includes specified priority fee
-        expect(response.status).to.equal(200);
-        expect(response.data).to.have.property('swapTransaction');
-        expect(response.data.swapTransaction).to.be.a('string');
-        expect(response.data.swapTransaction).to.not.be.empty;
+        SwapValidators.validatePriorityFee(response, level.fee);
 
-        // Validate priority fee is reflected in response
-        expect(response.data).to.have.property('prioritizationFeeLamports');
-        expect(response.data.prioritizationFeeLamports).to.be.a('number');
-
-        // API typically returns requested fee minus 1-2 lamports for compute optimization
-        const actualFee = response.data.prioritizationFeeLamports;
-        expect(actualFee).to.be.within(
-          level.fee - 5,
-          level.fee,
-          `Priority fee should be close to requested ${level.fee}, got ${actualFee}`
-        );
-
-        Logger.info(`${level.name} priority (${level.fee} lamports) -> response fee: ${actualFee}`);
+        Logger.info(`${level.name} priority (${level.fee} lamports) -> response fee: ${response.data.prioritizationFeeLamports}`);
       }
     });
 
@@ -112,22 +84,7 @@ describe('Jupiter Swap API Tests', () => {
 
       const response = await swapPage.postSwap(swapRequest);
 
-      // Expected: Transaction uses dynamic compute limit instead of max 1,400,000
-      expect(response.status).to.equal(200);
-      expect(response.data).to.have.property('swapTransaction');
-      expect(response.data.swapTransaction).to.be.a('string');
-      expect(response.data.swapTransaction).to.not.be.empty;
-
-      // Validate compute unit limit
-      expect(response.data).to.have.property('computeUnitLimit');
-      expect(response.data.computeUnitLimit).to.be.a('number');
-      expect(response.data.computeUnitLimit).to.be.greaterThan(0);
-
-      // Dynamic compute limit should be less than the default max of 1,400,000
-      expect(response.data.computeUnitLimit).to.be.lessThan(
-        1400000,
-        'Dynamic compute limit should be optimized to less than max 1,400,000'
-      );
+      SwapValidators.validateDynamicComputeLimit(response);
 
       Logger.info(
         `Dynamic compute limit: ${response.data.computeUnitLimit} (optimized from max 1,400,000)`
@@ -156,20 +113,7 @@ describe('Jupiter Swap API Tests', () => {
 
         const response = await swapPage.postSwap(swapRequest);
 
-        // Expected: Successful swap transaction for each token pair
-        expect(response.status).to.equal(200);
-        expect(response.data).to.have.property('swapTransaction');
-        expect(response.data.swapTransaction).to.be.a('string');
-        expect(response.data.swapTransaction).to.not.be.empty;
-        expect(response.data.swapTransaction).to.match(
-          /^[A-Za-z0-9+/]+=*$/,
-          'Should be valid base64'
-        );
-
-        // Validate required response fields
-        expect(response.data).to.have.property('lastValidBlockHeight');
-        expect(response.data.lastValidBlockHeight).to.be.a('number');
-        expect(response.data.lastValidBlockHeight).to.be.greaterThan(0);
+        SwapValidators.validateSuccessfulSwap(response, swapRequest);
       }
     });
   });
@@ -183,10 +127,9 @@ describe('Jupiter Swap API Tests', () => {
 
       const response = await swapPage.postSwap(invalidSwapRequest as any);
 
-      // Expected: 422 Unprocessable Entity with specific error message
-      expect(response.status).to.equal(422);
-      expect((response.data as any).error).to.include(
-        'Failed to deserialize the JSON body into the target type: missing field `quoteResponse`'
+      SwapValidators.validateUnprocessableEntity(
+        response,
+        ['Failed to deserialize the JSON body into the target type: missing field `quoteResponse`']
       );
     });
 
@@ -204,9 +147,10 @@ describe('Jupiter Swap API Tests', () => {
 
       const response = await swapPage.postSwap(invalidSwapRequest);
 
-      // Expected: 422 Unprocessable Entity with WrongSize error
-      expect(response.status).to.equal(422);
-      expect((response.data as any).error).to.include('userPublicKey: Parse error: WrongSize');
+      SwapValidators.validateUnprocessableEntity(
+        response,
+        ['userPublicKey: Parse error: WrongSize']
+      );
     });
 
     it('TC-07: Invalid User Public Key - Malformed Solana address', async () => {
@@ -223,9 +167,10 @@ describe('Jupiter Swap API Tests', () => {
 
       const response = await swapPage.postSwap(invalidSwapRequest);
 
-      // Expected: 422 Unprocessable Entity with WrongSize error for short address
-      expect(response.status).to.equal(422);
-      expect((response.data as any).error).to.include('userPublicKey: Parse error: WrongSize');
+      SwapValidators.validateUnprocessableEntity(
+        response,
+        ['userPublicKey: Parse error: WrongSize']
+      );
     });
 
     it('TC-08: Invalid User Public Key - Invalid base58 encoding', async () => {
@@ -242,9 +187,10 @@ describe('Jupiter Swap API Tests', () => {
 
       const response = await swapPage.postSwap(invalidSwapRequest);
 
-      // Expected: 422 Unprocessable Entity with Invalid error for bad base58
-      expect(response.status).to.equal(422);
-      expect((response.data as any).error).to.include('userPublicKey: Parse error: Invalid');
+      SwapValidators.validateUnprocessableEntity(
+        response,
+        ['userPublicKey: Parse error: Invalid']
+      );
     });
 
     it('TC-09: Invalid Quote - Negative amount in quote', async () => {
@@ -269,10 +215,9 @@ describe('Jupiter Swap API Tests', () => {
 
       const response = await swapPage.postSwap(swapRequest);
 
-      // Expected: Should have simulation error due to zero amount
-      expect(response.status).to.equal(422);
-      expect((response.data as any).error).to.include(
-        'Failed to deserialize the JSON body into the target type: quoteResponse.inAmount'
+      SwapValidators.validateUnprocessableEntity(
+        response,
+        ['Failed to deserialize the JSON body into the target type: quoteResponse.inAmount']
       );
     });
 
@@ -306,12 +251,11 @@ describe('Jupiter Swap API Tests', () => {
 
       const response = await swapPage.postSwap(swapRequest);
 
-      // Expected: Should return 400 with CIRCULAR_ARBITRAGE_IS_DISABLED error
-      expect(response.status).to.equal(400);
-      expect((response.data as any).error).to.equal(
-        'Input and output mints are not allowed to be equal'
+      SwapValidators.validateBadRequest(
+        response,
+        ['Input and output mints are not allowed to be equal'],
+        'CIRCULAR_ARBITRAGE_IS_DISABLED'
       );
-      expect((response.data as any).errorCode).to.equal('CIRCULAR_ARBITRAGE_IS_DISABLED');
     });
   });
 
@@ -332,16 +276,8 @@ describe('Jupiter Swap API Tests', () => {
       };
 
       const swapResponse = await swapPage.postSwap(swapRequest);
-      expect(swapResponse.status).to.equal(200);
-
-      // Dynamic slippage report appears for large swaps
-      expect(swapResponse.data.dynamicSlippageReport).to.exist;
-      expect(swapResponse.data.dynamicSlippageReport.slippageBps).to.be.a('number');
-
-      // Verify that the swap transaction is generated
-      expect(swapResponse.data.swapTransaction).to.exist;
-      expect(swapResponse.data.swapTransaction).to.be.a('string');
-      expect(swapResponse.data.swapTransaction).to.not.be.empty;
+      
+      SwapValidators.validateDynamicSlippage(swapResponse);
     });
   });
 });

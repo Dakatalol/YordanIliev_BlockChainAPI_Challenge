@@ -4,6 +4,10 @@ export interface TokenSearchRequest {
   limit?: number;
 }
 
+export interface TokenTagRequest {
+  tag: 'verified' | 'lst';
+}
+
 export interface TokenInfo {
   id: string;
   symbol: string;

@@ -118,4 +118,43 @@ describe('Jupiter Token API Tests', () => {
       expect(response.data.message).to.include('Expected required property');
     });
   });
+
+  describe('Token Tag Tests', () => {
+    it('TC-08: Should get verified tokens', async () => {
+      const response = await tokenPage.getTokensByTag({
+        tag: 'verified',
+      });
+
+      expect(response.status).to.equal(200);
+      expect(response.data.length).to.be.greaterThan(0);
+
+      // All returned tokens should be verified
+      response.data.forEach((token: any) => {
+        expect(token.isVerified).to.be.true;
+      });
+    });
+
+    it('TC-09: Should get lst tokens', async () => {
+      const response = await tokenPage.getTokensByTag({
+        tag: 'lst',
+      });
+
+      expect(response.status).to.equal(200);
+      expect(response.data.length).to.be.greaterThan(0);
+
+      // All returned tokens should have 'lst' tag
+      response.data.forEach((token: any) => {
+        expect(token.tags).to.include('lst');
+      });
+    });
+
+    it('TC-10: Should handle unrecognized tag (negative case)', async () => {
+      const response = await tokenPage.getTokensByTag({
+        tag: 'invalidtag' as any,
+      });
+
+      expect(response.status).to.equal(400);
+      expect(response.data.message).to.equal('Invalid tag provided.');
+    });
+  });
 });

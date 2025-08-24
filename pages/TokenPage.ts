@@ -1,5 +1,5 @@
 import { HttpClient } from '../utils/HttpClient';
-import { TokenSearchRequest } from '../types/tokenTypes';
+import { TokenSearchRequest, TokenTagRequest } from '../types/tokenTypes';
 
 /**
  * Page Object Model for Jupiter Token API endpoints
@@ -34,5 +34,17 @@ export class TokenPage {
     }
 
     return this.httpClient.get(`/tokens/v2/search?${params.toString()}`);
+  }
+
+  /**
+   * Get tokens by tag (verified or lst)
+   * @param request - Token tag request parameters
+   * @returns Promise with token tag response
+   */
+  async getTokensByTag(request: TokenTagRequest): Promise<any> {
+    const params = new URLSearchParams();
+    params.append('query', request.tag);
+
+    return this.httpClient.get(`/tokens/v2/tag?${params.toString()}`);
   }
 }

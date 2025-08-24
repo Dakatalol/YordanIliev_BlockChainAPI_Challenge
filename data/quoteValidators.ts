@@ -129,4 +129,54 @@ export class QuoteValidators {
       expectedErrorCode
     );
   }
+
+  // Comprehensive schema validation for quote response structure
+  static validateResponseSchema(response: any): void {
+    expect(response.status).to.equal(HTTP_STATUS.OK);
+    const data = response.data;
+
+    // Root level required fields existence and types
+    expect(data.inputMint).to.be.a('string');
+    expect(data.inAmount).to.be.a('string');
+    expect(data.outputMint).to.be.a('string');
+    expect(data.outAmount).to.be.a('string');
+    expect(data.otherAmountThreshold).to.be.a('string');
+    expect(data.swapMode).to.be.a('string');
+    expect(data.slippageBps).to.be.a('number');
+    expect(data.priceImpactPct).to.be.a('string');
+    expect(data.routePlan).to.be.an('array');
+    expect(data.contextSlot).to.be.a('number');
+    expect(data.timeTaken).to.be.a('number');
+
+    // RoutePlan array structure validation
+    expect(data.routePlan.length).to.be.greaterThan(0);
+    const firstRoute = data.routePlan[0];
+    
+    expect(firstRoute.swapInfo).to.be.an('object');
+    expect(firstRoute.percent).to.be.a('number');
+
+    // SwapInfo detailed structure validation
+    const swapInfo = firstRoute.swapInfo;
+    expect(swapInfo.ammKey).to.be.a('string');
+    expect(swapInfo.label).to.be.a('string');
+    expect(swapInfo.inputMint).to.be.a('string');
+    expect(swapInfo.outputMint).to.be.a('string');
+    expect(swapInfo.inAmount).to.be.a('string');
+    expect(swapInfo.outAmount).to.be.a('string');
+    expect(swapInfo.feeAmount).to.be.a('string');
+    expect(swapInfo.feeMint).to.be.a('string');
+
+    // Value constraints and format validation
+    expect(data.slippageBps).to.be.greaterThan(0);
+    expect(data.contextSlot).to.be.greaterThan(0);
+    expect(data.timeTaken).to.be.greaterThan(0);
+    expect(firstRoute.percent).to.be.greaterThan(0);
+    expect(firstRoute.percent).to.be.at.most(100);
+
+    // String format validation (numeric strings and addresses)
+    expect(data.inAmount).to.match(/^\d+$/, 'inAmount should be numeric string');
+    expect(data.outAmount).to.match(/^\d+$/, 'outAmount should be numeric string');
+    expect(data.inputMint).to.have.length.greaterThan(32);
+    expect(data.outputMint).to.have.length.greaterThan(32);
+  }
 }

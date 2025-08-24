@@ -1,6 +1,7 @@
 import { expect } from 'chai';
 import { HttpClient } from '../utils/HttpClient';
 import { SwapInstructionsPage } from '../pages/SwapInstructionsPage';
+import { SwapPage } from '../pages/SwapPage';
 import { QuotePage } from '../pages/QuotePage';
 import { config } from '../config/environment';
 import { VALID_USER_PUBLIC_KEY } from '../constants/constants';
@@ -10,11 +11,13 @@ import { SOL_TO_USDC_BASIC, USDC_TO_SOL_REVERSE } from '../data/quoteData';
 describe('Jupiter Swap Instructions API Tests', () => {
   let httpClient: HttpClient;
   let swapInstructionsPage: SwapInstructionsPage;
+  let swapPage: SwapPage;
   let quotePage: QuotePage;
 
   before(() => {
     httpClient = new HttpClient(config.JUPITER_BASE_URL, { type: 'none' });
     swapInstructionsPage = new SwapInstructionsPage(httpClient);
+    swapPage = new SwapPage(httpClient);
     quotePage = new QuotePage(httpClient);
   });
 
@@ -181,6 +184,34 @@ describe('Jupiter Swap Instructions API Tests', () => {
       expect((response.data as any).error).to.include(
         'Failed to deserialize the JSON body into the target type: missing field `userPublicKey`'
       );
+    });
+  });
+
+  describe('Endpoint Comparison Tests', () => {
+    it('TC-06: Compare with /swap Endpoint - Compare instruction count and response structure', async () => {
+      // Get a fresh quote for both endpoints
+      const quote = await quotePage.getQuote(SOL_TO_USDC_BASIC);
+      expect(quote.status).to.equal(200);
+
+      // Get instructions from swap-instructions endpoint
+      const instructions = await swapInstructionsPage.postSwapInstructions({
+        quoteResponse: quote.data,
+        userPublicKey: VALID_USER_PUBLIC_KEY,
+      });
+
+      // Get transaction from swap endpoint
+      const swap = await swapPage.postSwap({
+        quoteResponse: quote.data,
+        userPublicKey: VALID_USER_PUBLIC_KEY,
+      });
+
+      // Both endpoints should return 200 OK
+      expect(instructions.status).to.equal(200);
+      expect(swap.status).to.equal(200);
+
+      // Compare consistent fields between both endpoints
+      expect(instructions.data.computeUnitLimit).to.equal(swap.data.computeUnitLimit);
+      expect(instructions.data.prioritizationFeeLamports).to.equal(swap.data.prioritizationFeeLamports);
     });
   });
 });

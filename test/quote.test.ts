@@ -32,6 +32,36 @@ describe('Jupiter Quote API Tests', () => {
     });
   });
 
+  describe('Input Validation Tests', () => {
+    it('TC-04: Should reject missing required parameter inputMint', async () => {
+      const response = await quotePage.getQuote(INVALID_SCENARIOS.MISSING_INPUT_MINT as any);
+      QuoteValidators.validateBadRequest(response, ['inputMint']);
+    });
+
+    it('TC-05: Should reject invalid token mint format', async () => {
+      const response = await quotePage.getQuote(INVALID_SCENARIOS.INVALID_TOKEN_FORMAT);
+      QuoteValidators.validateBadRequest(response, ['Query parameter inputMint cannot be parsed']);
+    });
+
+    it('TC-06: Should reject zero amount', async () => {
+      const response = await quotePage.getQuote(INVALID_SCENARIOS.ZERO_AMOUNT);
+      QuoteValidators.validateBadRequest(
+        response,
+        ['Could not find any route'],
+        JUPITER_ERROR_CODES.COULD_NOT_FIND_ANY_ROUTE
+      );
+    });
+
+    it('TC-07: Should reject same input and output mint', async () => {
+      const response = await quotePage.getQuote(INVALID_SCENARIOS.SAME_INPUT_OUTPUT);
+      QuoteValidators.validateBadRequest(
+        response,
+        ['Input and output mints are not allowed to be equal'],
+        JUPITER_ERROR_CODES.CIRCULAR_ARBITRAGE_IS_DISABLED
+      );
+    });
+  });
+
   describe('Business Logic Tests', () => {
     it('TC-08: Should calculate slippage correctly', async () => {
       const response = await quotePage.getQuote(VALID_SCENARIOS.SLIPPAGE_CALCULATION_TEST);
@@ -44,6 +74,13 @@ describe('Jupiter Quote API Tests', () => {
     it('TC-09: Should return direct routes only when requested', async () => {
       const response = await quotePage.getQuote(VALID_SCENARIOS.DIRECT_ROUTES_ONLY);
       QuoteValidators.validateDirectRoutesOnly(response, VALID_SCENARIOS.DIRECT_ROUTES_ONLY);
+    });
+  });
+
+  describe('Error Handling Tests', () => {
+    it('TC-10: Should handle non-existent token mint', async () => {
+      const response = await quotePage.getQuote(INVALID_SCENARIOS.NON_EXISTENT_TOKEN);
+      QuoteValidators.validateBadRequest(response, ['Query parameter inputMint cannot be parsed']);
     });
   });
 
@@ -82,40 +119,11 @@ describe('Jupiter Quote API Tests', () => {
     });
   });
 
-  describe('Input Validation Tests', () => {
-    it('TC-04: Should reject missing required parameter inputMint', async () => {
-      const response = await quotePage.getQuote(INVALID_SCENARIOS.MISSING_INPUT_MINT as any);
-      QuoteValidators.validateBadRequest(response, ['inputMint']);
-    });
-
-    it('TC-05: Should reject invalid token mint format', async () => {
-      const response = await quotePage.getQuote(INVALID_SCENARIOS.INVALID_TOKEN_FORMAT);
-      QuoteValidators.validateBadRequest(response, ['Query parameter inputMint cannot be parsed']);
-    });
-
-    it('TC-06: Should reject zero amount', async () => {
-      const response = await quotePage.getQuote(INVALID_SCENARIOS.ZERO_AMOUNT);
-      QuoteValidators.validateBadRequest(
-        response,
-        ['Could not find any route'],
-        JUPITER_ERROR_CODES.COULD_NOT_FIND_ANY_ROUTE
-      );
-    });
-
-    it('TC-07: Should reject same input and output mint', async () => {
-      const response = await quotePage.getQuote(INVALID_SCENARIOS.SAME_INPUT_OUTPUT);
-      QuoteValidators.validateBadRequest(
-        response,
-        ['Input and output mints are not allowed to be equal'],
-        JUPITER_ERROR_CODES.CIRCULAR_ARBITRAGE_IS_DISABLED
-      );
-    });
-  });
-
-  describe('Error Handling Tests', () => {
-    it('TC-10: Should handle non-existent token mint', async () => {
-      const response = await quotePage.getQuote(INVALID_SCENARIOS.NON_EXISTENT_TOKEN);
-      QuoteValidators.validateBadRequest(response, ['Query parameter inputMint cannot be parsed']);
+  describe('Response Schema Validation', () => {
+    it('TC-13: Should validate complete quote response schema structure', async () => {
+      const response = await quotePage.getQuote(VALID_SCENARIOS.SOL_TO_USDC_BASIC);
+      
+      QuoteValidators.validateResponseSchema(response);
     });
   });
 });

@@ -149,4 +149,38 @@ describe('Jupiter Swap Instructions API Tests', () => {
       expect(response.data.cleanupInstruction.accounts.length).to.be.greaterThan(1);
     });
   });
+
+  describe('Input Validation Tests', () => {
+    it('TC-04: Invalid Quote Response - Send request with empty/invalid quote', async () => {
+      // Input: Request with empty/invalid quote object
+      const response = await swapInstructionsPage.postSwapInstructions({
+        quoteResponse: {}, // Empty/invalid quote
+        userPublicKey: VALID_USER_PUBLIC_KEY,
+      });
+
+      // Expected: 422 Unprocessable Entity with missing field error
+      expect(response.status).to.equal(422);
+      expect((response.data as any).error).to.include(
+        'Failed to deserialize the JSON body into the target type: quoteResponse: missing field `inputMint`'
+      );
+    });
+
+    it('TC-05: Missing User Public Key - Send request without userPublicKey', async () => {
+      // First get a valid quote
+      const validQuote = await quotePage.getQuote(SOL_TO_USDC_BASIC);
+      expect(validQuote.status).to.equal(200);
+
+      // Input: Request missing userPublicKey field
+      const response = await swapInstructionsPage.postSwapInstructions({
+        quoteResponse: validQuote.data,
+        // Missing userPublicKey
+      } as any);
+
+      // Expected: 422 Unprocessable Entity with missing field error
+      expect(response.status).to.equal(422);
+      expect((response.data as any).error).to.include(
+        'Failed to deserialize the JSON body into the target type: missing field `userPublicKey`'
+      );
+    });
+  });
 });

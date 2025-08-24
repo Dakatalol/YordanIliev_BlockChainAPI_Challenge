@@ -1,6 +1,5 @@
 import { HttpClient } from '../utils/HttpClient';
 import { TokenSearchRequest } from '../types/tokenTypes';
-import { config } from '../config/environment';
 
 /**
  * Page Object Model for Jupiter Token API endpoints

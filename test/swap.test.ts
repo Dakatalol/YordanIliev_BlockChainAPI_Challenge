@@ -19,7 +19,7 @@ describe('Jupiter Swap API Tests', () => {
   let quotePage: QuotePage;
 
   before(() => {
-    httpClient = new HttpClient(config.JUPITER_BASE_URL, { type: 'none' });
+    httpClient = new HttpClient(config.JUPITER_BASE_URL);
     swapPage = new SwapPage(httpClient);
     quotePage = new QuotePage(httpClient);
   });

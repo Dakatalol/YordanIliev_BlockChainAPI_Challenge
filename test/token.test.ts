@@ -9,7 +9,7 @@ describe('Jupiter Token API Tests', () => {
   let tokenPage: TokenPage;
 
   before(() => {
-    httpClient = new HttpClient(config.JUPITER_BASE_URL, { type: 'none' });
+    httpClient = new HttpClient(config.JUPITER_BASE_URL);
     tokenPage = new TokenPage(httpClient);
   });
 

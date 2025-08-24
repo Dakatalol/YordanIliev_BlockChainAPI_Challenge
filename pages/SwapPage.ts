@@ -1,7 +1,6 @@
 import { AxiosResponse } from 'axios';
 import { HttpClient } from '../utils/HttpClient';
 import { SwapRequest, SwapResponse } from '../types/swapTypes';
-import { config } from '../config/environment';
 
 export class SwapPage {
   private httpClient: HttpClient;

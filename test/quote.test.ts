@@ -11,7 +11,7 @@ describe('Jupiter Quote API Tests', () => {
   let quotePage: QuotePage;
 
   before(() => {
-    httpClient = new HttpClient(config.JUPITER_BASE_URL, { type: 'none' });
+    httpClient = new HttpClient(config.JUPITER_BASE_URL);
     quotePage = new QuotePage(httpClient);
   });
 

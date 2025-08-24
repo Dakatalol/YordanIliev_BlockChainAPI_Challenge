@@ -1,7 +1,6 @@
 import { AxiosResponse } from 'axios';
 import { HttpClient } from '../utils/HttpClient';
 import { SwapInstructionsRequest, SwapInstructionsResponse } from '../types/swapInstructionsTypes';
-import { config } from '../config/environment';
 
 /**
  * Page object for Jupiter's swap-instructions API endpoint

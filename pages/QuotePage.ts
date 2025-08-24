@@ -1,7 +1,6 @@
 import { AxiosResponse } from 'axios';
 import { HttpClient } from '../utils/HttpClient';
 import { QuoteRequest, QuoteResponse } from '../types/quoteTypes';
-import { config } from '../config/environment';
 
 export class QuotePage {
   private httpClient: HttpClient;

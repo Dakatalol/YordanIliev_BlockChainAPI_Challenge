@@ -10,7 +10,7 @@ export const TEST_AMOUNTS = {
   MEDIUM: '100000000', // 0.1 SOL
   USDC_MEDIUM: '18388092', // ~18.39 USDC
   USDC_LARGE: '1000000000', // 1000 USDC
-  // Very large amounts for liquidity limit testing
+  // Large amounts for liquidity limit testing
   MILLION_SOL: '1000000000000000', // 1,000,000 SOL (1M SOL)
   ZERO: '0',
   NEGATIVE: '-5',

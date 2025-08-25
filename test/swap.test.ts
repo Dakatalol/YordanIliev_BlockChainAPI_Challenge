@@ -93,7 +93,7 @@ describe('Jupiter Swap API Tests', () => {
       );
     });
 
-    it('TC-05: Different Token Pairs - Swap transactions for various token combinations', async () => {
+    it('TC-04: Different Token Pairs - Swap transactions for various token combinations', async () => {
       const tokenPairs = [
         { name: 'SOL → USDC', quoteRequest: SOL_TO_USDC_BASIC, wrapSol: true },
         { name: 'USDC → SOL', quoteRequest: USDC_TO_SOL_REVERSE, wrapSol: true },
@@ -121,7 +121,7 @@ describe('Jupiter Swap API Tests', () => {
   });
 
   describe('Input Validation Tests', () => {
-    it('TC-04: Missing Required Fields - Send request without quoteResponse', async () => {
+    it('TC-05: Missing Required Fields - Send request without quoteResponse', async () => {
       // Input: Request missing quoteResponse field
       const invalidSwapRequest = {
         userPublicKey: VALID_USER_PUBLIC_KEY,
@@ -255,7 +255,7 @@ describe('Jupiter Swap API Tests', () => {
   });
 
   describe('Large Amount Handling Tests', () => {
-    it('TC-12: Million SOL Swap - Test extreme liquidity limits with 1M SOL to USDC', async () => {
+    it('TC-11: Million SOL Swap - Test extreme liquidity limits with 1M SOL to USDC', async () => {
       // Test handling of extremely large amounts (1M SOL) that will likely exceed liquidity limits
       // This tests how the API handles requests that are beyond realistic market conditions
       const quoteResponse = await quotePage.getQuote(MILLION_SOL_TO_USDC);

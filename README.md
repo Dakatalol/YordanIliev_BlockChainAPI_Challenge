@@ -182,5 +182,5 @@ Check the **Actions** tab in GitHub to see test results and build status.
 ## Dependencies
 
 - **Mocha + Chai** - Test framework and assertions
-- **TypeScript** - Type safety and development experience
+- **TypeScript** - Prefered for Type safety
 - **Axios** - HTTP client for API requests

@@ -4,7 +4,6 @@ import { EXPECTED_RANGES, HTTP_STATUS } from '../constants/constants';
 import { Logger } from '../utils/Logger';
 
 export class QuoteValidators {
-  // Basic successful response validation
   static validateSuccessfulQuote(response: any, request: QuoteRequest): void {
     expect(response.status).to.equal(HTTP_STATUS.OK);
     expect(response.data).to.have.property('inputMint', request.inputMint);
@@ -14,13 +13,11 @@ export class QuoteValidators {
     expect(response.data).to.have.property('routePlan');
     expect(response.data).to.have.property('slippageBps', request.slippageBps);
 
-    // Data type validations
     expect(response.data.outAmount).to.be.a('string');
     expect(parseInt(response.data.outAmount)).to.be.greaterThan(0);
     expect(response.data.routePlan.length).to.be.greaterThan(0);
   }
 
-  // Validation for stablecoin swaps (should have minimal price impact)
   static validateStablecoinSwap(response: any, request: QuoteRequest): void {
     this.validateSuccessfulQuote(response, request);
 
@@ -39,7 +36,6 @@ export class QuoteValidators {
     expect(priceImpact).to.be.lessThan(0.5, 'Price impact too high for stablecoin swap');
   }
 
-  // Validation for slippage calculation
   static validateSlippageCalculation(response: any, request: QuoteRequest): void {
     this.validateSuccessfulQuote(response, request);
 
@@ -47,10 +43,8 @@ export class QuoteValidators {
     const otherAmountThreshold = parseInt(response.data.otherAmountThreshold);
     const slippageBps = request.slippageBps;
 
-    // Calculate expected threshold: outAmount - (outAmount * slippageBps / 10000)
     const expectedThreshold = Math.floor(outAmount - (outAmount * slippageBps) / 10000);
 
-    // Allow for 1 unit difference due to rounding
     const difference = Math.abs(otherAmountThreshold - expectedThreshold);
     expect(difference).to.be.lessThanOrEqual(
       1,
@@ -58,7 +52,6 @@ export class QuoteValidators {
     );
   }
 
-  // Validation for direct routes only
   static validateDirectRoutesOnly(response: any, request: QuoteRequest): void {
     this.validateSuccessfulQuote(response, request);
 
@@ -72,22 +65,6 @@ export class QuoteValidators {
     expect(route.swapInfo.outputMint).to.equal(request.outputMint);
   }
 
-  // Validation for restricted vs unrestricted intermediate tokens
-  static validateIntermediateTokenRestriction(
-    restrictedResponse: any,
-    unrestrictedResponse: any,
-    request: QuoteRequest
-  ): void {
-    this.validateSuccessfulQuote(restrictedResponse, request);
-    this.validateSuccessfulQuote(unrestrictedResponse, request);
-
-    // Both should be successful, but routes might differ
-    // This is more of a comparison test to ensure the parameter works
-    Logger.debug(`Restricted routes: ${restrictedResponse.data.routePlan.length}`);
-    Logger.debug(`Unrestricted routes: ${unrestrictedResponse.data.routePlan.length}`);
-  }
-
-  // Validation for error responses with optional error code validation
   static validateErrorResponse(
     errorOrResponse: any,
     expectedStatus: number,
@@ -129,7 +106,7 @@ export class QuoteValidators {
     );
   }
 
-  // Comprehensive schema validation for quote response structure
+  // Schema validation for quote response structure
   static validateResponseSchema(response: any): void {
     expect(response.status).to.equal(HTTP_STATUS.OK);
     const data = response.data;

@@ -15,7 +15,6 @@ export class SwapInstructionsValidators {
   static validateSuccessfulInstructions(response: any, request: SwapInstructionsRequest): void {
     expect(response.status).to.equal(HTTP_STATUS.OK);
 
-    // Validate main instruction categories
     expect(response.data).to.have.property('computeBudgetInstructions');
     expect(response.data.computeBudgetInstructions).to.be.an('array');
 
@@ -28,7 +27,6 @@ export class SwapInstructionsValidators {
     expect(response.data).to.have.property('cleanupInstruction');
     expect(response.data.cleanupInstruction).to.be.an('object');
 
-    // Validate response metadata
     expect(response.data).to.have.property('prioritizationFeeLamports');
     expect(response.data.prioritizationFeeLamports).to.be.a('number');
 

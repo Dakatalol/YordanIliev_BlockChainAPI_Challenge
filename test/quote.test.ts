@@ -88,7 +88,6 @@ describe('Jupiter Quote API Tests', () => {
     it('TC-11: Should return multi-hop routes for large SOL amount (1M SOL)', async () => {
       const response = await quotePage.getQuote(MILLION_SOL_TO_USDC);
 
-      // Validate successful quote response
       QuoteValidators.validateSuccessfulQuote(response, MILLION_SOL_TO_USDC);
 
       // Verify that large amounts require multi-hop routing
@@ -102,7 +101,6 @@ describe('Jupiter Quote API Tests', () => {
     it('TC-12: Should distribute large amounts across multiple routes efficiently', async () => {
       const response = await quotePage.getQuote(MILLION_SOL_TO_USDC);
 
-      // Validate successful quote response
       QuoteValidators.validateSuccessfulQuote(response, MILLION_SOL_TO_USDC);
 
       // Verify multiple routes are used for large amounts

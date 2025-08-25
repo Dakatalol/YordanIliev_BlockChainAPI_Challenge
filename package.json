@@ -8,6 +8,7 @@
     "test:token": "mocha --require ts-node/register test/token.test.ts",
     "test:price": "mocha --require ts-node/register test/price.test.ts",
     "test:report": "mocha --require ts-node/register test/**/*.test.ts --reporter mochawesome --reporter-options reportDir=reports,reportFilename=test-report,html=true,json=false",
+    "open:report": "start reports/test-report.html || open reports/test-report.html || xdg-open reports/test-report.html",
     "perf:quote": "k6 run k6/quote-performance.js",
     "format": "prettier --write ."
   },

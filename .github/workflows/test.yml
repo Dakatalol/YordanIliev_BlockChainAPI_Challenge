@@ -24,6 +24,14 @@ jobs:
         run: npm ci
 
       - name: Run all tests
-        run: npm test
+        run: npm run test:report
         env:
           LOG_LEVEL: INFO
+
+      - name: Upload test report
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: test-report
+          path: reports/
+          retention-days: 30

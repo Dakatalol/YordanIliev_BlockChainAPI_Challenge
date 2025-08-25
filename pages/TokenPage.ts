@@ -1,10 +1,6 @@
 import { HttpClient } from '../utils/HttpClient';
 import { TokenSearchRequest, TokenTagRequest } from '../types/tokenTypes';
 
-/**
- * Page Object Model for Jupiter Token API endpoints
- * Handles token search by symbol, name, or mint address
- */
 export class TokenPage {
   private httpClient: HttpClient;
 

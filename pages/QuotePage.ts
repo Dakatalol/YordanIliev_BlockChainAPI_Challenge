@@ -21,6 +21,11 @@ export class QuotePage {
     return queryParams;
   }
 
+  /**
+   * Retrieves a quote for token swaps with specified parameters
+   * @param params - The quote request containing swap parameters
+   * @returns Promise resolving to quote response with pricing and route information
+   */
   async getQuote(params: QuoteRequest): Promise<AxiosResponse<QuoteResponse>> {
     const queryParams = this.buildQueryParams(params);
     return this.httpClient.get<QuoteResponse>(`/swap/v1/quote?${queryParams.toString()}`);

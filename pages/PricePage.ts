@@ -2,10 +2,6 @@ import { HttpClient } from '../utils/HttpClient';
 import { PriceRequest, PriceResponse } from '../types/priceTypes';
 import { AxiosResponse } from 'axios';
 
-/**
- * Page Object Model for Jupiter Price API endpoints
- * Handles price retrieval for multiple token mint addresses
- */
 export class PricePage {
   private httpClient: HttpClient;
 

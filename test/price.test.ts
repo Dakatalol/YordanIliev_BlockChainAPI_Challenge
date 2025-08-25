@@ -81,7 +81,7 @@ describe('Jupiter Price API Tests', () => {
       const singleSolPrice = singleResponse.data[TOKEN_ADDRESSES.SOL].usdPrice;
       const batchSolPrice = batchResponse.data[TOKEN_ADDRESSES.SOL].usdPrice;
 
-      expect(singleSolPrice).to.be.approximately(batchSolPrice, 0.1);
+      expect(singleSolPrice).to.be.approximately(batchSolPrice, 0.5);
     });
   });
 

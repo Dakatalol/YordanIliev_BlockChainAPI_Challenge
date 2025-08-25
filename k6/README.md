@@ -9,6 +9,7 @@ Simple performance testing for Jupiter Quote API using K6.
 Install K6 (required before running performance tests):
 
 ### Windows
+
 ```bash
 # Using Windows Package Manager
 winget install k6 --source winget
@@ -18,6 +19,7 @@ choco install k6
 ```
 
 ### macOS
+
 ```bash
 brew install k6
 ```
@@ -33,11 +35,13 @@ export JUPITER_BASE_URL=https://lite-api.jup.ag
 ## Running Tests
 
 ### Default Test (10 VUs for 30s)
+
 ```bash
 npm run perf:quote
 ```
 
 ### Custom Configuration
+
 ```bash
 # 5 virtual users for 1 minute
 k6 run --vus 5 --duration 1m k6/quote-performance.js
@@ -49,6 +53,7 @@ k6 run --vus 20 --duration 2m k6/quote-performance.js
 ## Test Scenario
 
 The performance test covers a single quote scenario:
+
 - SOL → USDC (0.1 SOL with 50 bps slippage)
 
 ## Thresholds
